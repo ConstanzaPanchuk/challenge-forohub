@@ -5,13 +5,15 @@ import com.alura.challenge_forohub.domain.Topico;
 import com.alura.challenge_forohub.domain.TopicoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/topicos")
@@ -33,5 +35,17 @@ public class TopicoController {
         repository.save(topico);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(topico);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<Topico>> listarTopicos(
+            @PageableDefault(size = 10, sort = "fechaCreacion")
+            Pageable paginacion) {
+        return ResponseEntity.ok(repository.findAll(paginacion));
+    }
+
+    @GetMapping("/curso")
+    public ResponseEntity<List<Topico>> listarPorCurso(@RequestParam String curso) {
+        return ResponseEntity.ok(repository.findByCurso(curso));
     }
 }
