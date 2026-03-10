@@ -1,4 +1,4 @@
-package com.alura.challenge_forohub.domain;
+package com.alura.challenge_forohub.domain.topico;
 
 public record DatosActualizarTopico(
         String titulo,
